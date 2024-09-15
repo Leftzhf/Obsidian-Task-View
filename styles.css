@@ -54,7 +54,7 @@ If your plugin does not need CSS, delete this file.
   
   .task-date {
     position: absolute;
-    left: -50px; /* 调整位置 */
+    left: 17px;
     top: 20px;
     width: 80px;
     text-align: right;
@@ -63,7 +63,7 @@ If your plugin does not need CSS, delete this file.
     background-color: var(--background-primary);
     padding: 2px 5px;
     z-index: 2;
-  }
+}
   
   .task-tags {
     display: flex;
@@ -165,18 +165,18 @@ If your plugin does not need CSS, delete this file.
   
   .task-status-icon {
     position: absolute;
-    left: 41px; /* 调整位置 */
-    top: 18px;
+    left: 53px;
+    top: 45px;
     width: 18px;
-    height: 18px;
+    height: 20px;
     border-radius: 50%;
     background-color: var(--background-primary);
     border: 2px solid var(--background-modifier-border);
-    z-index: 2;
+    z-index: 26;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+}
   
   .task-icon {
     font-size: 12px;
