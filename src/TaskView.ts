@@ -79,33 +79,61 @@ export class TaskView extends ItemView {
     container.empty();
     container.createEl('h4', { text: 'Task Timeline' });
     
-    // 创建时间线容器
     const timelineContainer = container.createEl('div', { cls: 'timeline-container' });
 
-    // 按日期排序任务
     const sortedTasks = sampleTasks.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-    // 遍历排序后的任务并创建时间线项
+    let currentYear = '';
+    let currentMonth = '';
+    let currentWeek = '';
+
     sortedTasks.forEach((task, index) => {
+      const taskDate = new Date(task.date);
+      const year = taskDate.getFullYear().toString();
+      const month = taskDate.toLocaleString('default', { month: 'long' });
+      const week = this.getWeekNumber(taskDate);
+
+      // 添加年份标记
+      if (year !== currentYear) {
+        currentYear = year;
+        const yearEl = timelineContainer.createEl('div', { cls: 'timeline-year', text: year });
+        yearEl.dataset.year = year;
+      }
+
+      // 添加月份标记
+      if (`${year}-${month}` !== currentMonth) {
+        currentMonth = `${year}-${month}`;
+        const monthEl = timelineContainer.createEl('div', { cls: 'timeline-month', text: month });
+        monthEl.dataset.month = `${year}-${month}`;
+      }
+
+      // 添加周标记
+      if (`${year}-W${week}` !== currentWeek) {
+        currentWeek = `${year}-W${week}`;
+        const weekEl = timelineContainer.createEl('div', { cls: 'timeline-week', text: `Week ${week}` });
+        weekEl.dataset.week = `${year}-W${week}`;
+      }
+
       const timelineItem = timelineContainer.createEl('div', { cls: 'timeline-item' });
       
       // 创建时间线连接线
-      if (index < sortedTasks.length - 1) {
-        timelineItem.createEl('div', { cls: 'timeline-line' });
-      }
+      timelineItem.createEl('div', { cls: 'timeline-line' });
+
+      // 创建日期和状态图标容器
+      const dateStatusContainer = timelineItem.createEl('div', { cls: 'date-status-container' });
 
       // 创建日期标记
-      timelineItem.createEl('div', { cls: 'timeline-date', text: task.date });
+      dateStatusContainer.createEl('div', { cls: 'task-date', text: task.date });
+
+      // 创建任务状态图标
+      const statusIcon = dateStatusContainer.createEl('div', { cls: 'task-status-icon' });
+      this.setTaskStatusIcon(statusIcon, task.status);
 
       // 创建任务卡片
       const taskCard = timelineItem.createEl('div', { cls: 'task-card' });
       
-      // 创建任务头部（状态）
+      // 创建任务头部（时间）
       const cardHeader = taskCard.createEl('div', { cls: 'task-card-header' });
-      cardHeader.createEl('span', { 
-        cls: `task-status task-status-${task.status}`,
-        text: task.status
-      });
       cardHeader.createEl('span', { 
         cls: 'task-time',
         text: `${task.startTime} - ${task.endTime}`
@@ -145,5 +173,47 @@ export class TaskView extends ItemView {
     } else {
       container.classList.remove('narrow');
     }
+  }
+
+  private setTaskStatusIcon(element: HTMLElement, status: string) {
+    let iconClass = '';
+    let iconContent = '';
+    switch (status) {
+      case 'todo':
+        iconClass = 'task-todo';
+        iconContent = ''; // 空圆圈
+        break;
+      case 'in-progress':
+        iconClass = 'task-in-progress';
+        iconContent = '/'; // 斜线
+        break;
+      case 'done':
+        iconClass = 'task-done';
+        iconContent = '✓'; // 勾号
+        break;
+      case 'cancelled':
+        iconClass = 'task-cancelled';
+        iconContent = '✗'; // 叉号
+        break;
+      case 'important':
+        iconClass = 'task-important';
+        iconContent = '❗'; // 感叹号
+        break;
+      case 'recurring':
+        iconClass = 'task-recurring';
+        iconContent = '🔁'; // 循环箭头
+        break;
+    }
+    element.addClass(iconClass);
+    element.innerHTML = `<span class="task-icon">${iconContent}</span>`;
+  }
+
+  // 添加获取周数的辅助方法
+  private getWeekNumber(date: Date): number {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
   }
 }

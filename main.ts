@@ -2,7 +2,15 @@ import { Plugin, WorkspaceLeaf, addIcon } from 'obsidian';
 import { TaskView } from './src/TaskView';
 import { SettingTab } from './src/SettingTab';
 
-const TASK_VIEW_ICON = `<svg>...</svg>`; // 添加您的自定义图标 SVG
+const TASK_VIEW_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="10" y="10" width="80" height="80" rx="5" ry="5"/>
+  <line x1="10" y1="30" x2="90" y2="30"/>
+  <line x1="30" y1="10" x2="30" y2="90"/>
+  <circle cx="20" cy="50" r="3" fill="currentColor"/>
+  <circle cx="20" cy="70" r="3" fill="currentColor"/>
+  <line x1="40" y1="50" x2="80" y2="50"/>
+  <line x1="40" y1="70" x2="80" y2="70"/>
+</svg>`;
 
 export default class TaskViewPlugin extends Plugin {
 	async onload() {

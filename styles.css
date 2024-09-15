@@ -8,162 +8,311 @@ If your plugin does not need CSS, delete this file.
 */
 
 .task-view-container {
-  padding: 10px;
-}
-
-.task-timeline {
-  list-style-type: none;
-  padding: 0;
-}
-
-.task-item {
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.task-status {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.task-status-todo {
-  background-color: #ffd700;
-  color: #000;
-}
-
-.task-status-in-progress {
-  background-color: #1e90ff;
-  color: #fff;
-}
-
-.task-status-done {
-  background-color: #32cd32;
-  color: #fff;
-}
-
-.task-content {
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.task-date {
-  font-size: 12px;
-  color: #888;
-}
-
-.task-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.task-tag {
-  background-color: #e0e0e0;
-  color: #333;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-}
-
-.task-card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  padding: 10px;
-}
-
-.task-card {
-  flex-grow: 1;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: box-shadow 0.3s ease;
-  margin-left: 20px; /* 减少左边距 */
-}
-
-.task-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.task-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.timeline-container {
-  position: relative;
-  padding: 20px 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline-item {
-  position: relative;
-  padding: 20px 0;
-  display: flex;
-  align-items: flex-start;
-}
-
-.timeline-date {
-  flex-shrink: 0;
-  width: 100px;
-  padding: 5px 10px;
-  background-color: #f9f9f9;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-right: 20px;
-  position: relative; /* 添加相对定位 */
-}
-
-.timeline-line {
-  position: absolute;
-  left: 50px; /* 调整到日期中心 */
-  top: 30px; /* 从日期下方开始 */
-  bottom: -20px;
-  width: 2px;
-  background-color: #ddd;
-}
-
-.task-time {
-  font-size: 12px;
-  color: #666;
-}
-
-/* 响应式布局 */
-@media (max-width: 600px) {
-  .timeline-item {
-    flex-direction: column;
+    padding: 10px;
   }
-
-  .timeline-date {
-    margin-bottom: 20px; /* 增加底部边距 */
-    align-self: flex-start;
+  
+  .task-timeline {
+    list-style-type: none;
+    padding: 0;
   }
-
-  .timeline-line {
-    left: 50px; /* 保持线的位置 */
-    top: 30px; /* 调整线的起始位置 */
-    bottom: -10px;
+  
+  .task-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
   }
-
+  
+  .task-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .task-status-todo {
+    background-color: #ffd700;
+    color: #000;
+  }
+  
+  .task-status-in-progress {
+    background-color: #1e90ff;
+    color: #fff;
+  }
+  
+  .task-status-done {
+    background-color: #32cd32;
+    color: #fff;
+  }
+  
+  .task-content {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .task-date {
+    position: absolute;
+    left: -50px; /* 调整位置 */
+    top: 20px;
+    width: 80px;
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-muted);
+    background-color: var(--background-primary);
+    padding: 2px 5px;
+    z-index: 2;
+  }
+  
+  .task-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .task-tag {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+  }
+  
+  .task-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px;
+  }
+  
   .task-card {
-    width: 100%;
-    margin-left: 0; /* 移除左边距 */
+    flex-grow: 1;
+    width: calc(100% - 20px); /* 调整卡片宽度 */
+    margin-left: 30px; /* 减少左边距 */
+    background-color: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
   }
-}
+  
+  .task-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .task-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .timeline-container {
+    position: relative;
+    padding: 20px 0 20px 100px;
+  }
+  
+  .timeline-item {
+    position: relative;
+    padding: 20px 0 20px 40px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .timeline-year,
+  .timeline-month,
+  .timeline-week {
+    font-weight: bold;
+    margin-left: -40px; /* 调整左边距 */
+    padding: 10px 0 10px 40px; /* 调整内边距 */
+    color: var(--text-normal);
+    position: relative;
+  }
+  
+  .timeline-year {
+    font-size: 20px;
+  }
+  
+  .timeline-month {
+    font-size: 18px;
+  }
+  
+  .timeline-week {
+    font-size: 16px;
+  }
+  
+  .timeline-line {
+    position: absolute;
+    left: 50px; /* 调整位置 */
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--background-modifier-border);
+  }
+  
+  .date-status-container {
+    position: absolute;
+    left: -60px;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 2;
+  }
+  
+  .task-status-icon {
+    position: absolute;
+    left: 41px; /* 调整位置 */
+    top: 18px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--background-primary);
+    border: 2px solid var(--background-modifier-border);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .task-icon {
+    font-size: 12px;
+    line-height: 1;
+  }
+  
+  .task-todo .task-icon {
+    color: var(--text-muted);
+  }
+  
+  .task-in-progress .task-icon {
+    color: var(--text-accent);
+  }
+  
+  .task-done .task-icon {
+    color: var(--text-success);
+  }
+  
+  .task-cancelled .task-icon {
+    color: var(--text-error);
+  }
+  
+  .task-important .task-icon {
+    color: #ff5722;
+  }
+  
+  .task-recurring .task-icon {
+    color: #9c27b0;
+  }
+  
+  .task-time {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  /* 响应式布局 */
+  @media (max-width: 600px) {
+    .timeline-container {
+      padding-left: 70px;
+    }
+  
+    .timeline-item {
+      padding-left: 30px;
+    }
+  
+    .timeline-line,
+    .timeline-container::before {
+      left: 35px;
+    }
+  
+    .task-status-icon {
+      left: 26px;
+    }
+  
+    .task-card {
+      width: 100%;
+      margin-left: 20px;
+    }
+  }
+  
+  /* 移除之前的 .task-done::after 样式 */
+
+  /* 调整时间线项的式 */
+  .timeline-item {
+    position: relative;
+    padding-left: 20px;
+  }
+  
+  .timeline-line {
+    left: 0;
+  }
+  
+  /* 调整任务卡片样式 */
+  .task-card {
+    margin-left: 20px; /* 增加左边距 */
+    background-color: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  /* 新增：年份和月份样式 */
+  .timeline-year,
+  .timeline-month {
+    font-weight: bold;
+    margin-left: -60px; /* 对齐时间线 */
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--text-normal);
+  }
+  
+  .timeline-year {
+    font-size: 18px;
+  }
+  
+  .timeline-month {
+    font-size: 16px;
+  }
+  
+  /* 响应式布局调整 */
+  @media (max-width: 600px) {
+    .timeline-item {
+      padding-left: 30px;
+    }
+  
+    .timeline-line {
+      left: 12px; /* 调整线的位置 */
+    }
+  
+    .task-status-icon {
+      left: 3px; /* 调整图标位置 */
+    }
+  
+    .task-card {
+      width: calc(100% - 25px); /* 调整卡片宽度 */
+    }
+  
+    .timeline-year,
+    .timeline-month {
+      margin-left: 25px;
+    }
+  }
+  
+  /* 任状态样式（参考Tasks插件） */
+  .task-cancelled {
+    background-color: var(--text-error);
+  }
+  
+  .task-important {
+    background-color: #ff5722;
+  }
+  
+  .task-recurring {
+    background-color: #9c27b0;
+  }
+  
+  /* 移除之前的 ::after 伪元素样式 */
