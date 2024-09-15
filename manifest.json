@@ -1,11 +1,9 @@
 {
-	"id": "task-view",
+	"id": "obsidian-task-view",
 	"name": "Task View",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "A view for managing tasks.",
-	"author": "LeftLeft",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "A timeline task view plugin for Obsidian",
+	"author": "Your Name",
 	"isDesktopOnly": false
 }
