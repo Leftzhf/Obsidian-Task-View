@@ -154,7 +154,7 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
         break;
       case 'in-progress':
         iconClass = 'task-in-progress';
-        iconContent = '◔';
+        iconContent = '';
         break;
       case 'done':
         iconClass = 'task-done';
@@ -195,6 +195,10 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
               )}
               <div className="timeline-item">
                 <div className="timeline-line"></div>
+                <div className="task-start-time">{task.startTime}</div>
+                <div className="task-status-icon">
+                  {renderTaskStatusIcon(task.status)}
+                </div>
                 <div className="task-card">
                   <div className="task-card-header">
                     <span className="task-time">{`${task.startTime} - ${task.endTime}`}</span>
@@ -205,9 +209,6 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
                       <span key={tagIndex} className="task-tag">#{tag}</span>
                     ))}
                   </div>
-                </div>
-                <div className="task-status-icon">
-                  {renderTaskStatusIcon(task.status)}
                 </div>
               </div>
             </React.Fragment>
@@ -262,7 +263,7 @@ export class TaskViewWrapper extends ItemView {
 
       .timeline-container {
         position: relative;
-        padding-left: 30px;
+        padding-left: 70px;  // 增加左侧padding
       }
 
       .timeline-year,
@@ -289,25 +290,28 @@ export class TaskViewWrapper extends ItemView {
 
       .timeline-line {
         position: absolute;
-        left: 10px;
+        left: 60px;  // 调整时间线位置
         top: 0;
         bottom: -20px;
         width: 2px;
         background-color: var(--background-modifier-border);
       }
 
-      .task-card {
-        flex-grow: 1;
-        background-color: var(--background-secondary);
-        border-radius: 5px;
-        padding: 10px;
-        margin-left: 30px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      .task-start-time {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 45px;  // 增加宽度
+        text-align: right;
+        font-size: 0.8em;
+        color: var(--text-muted);
+        padding-right: 5px;  // 添加右侧padding
       }
 
       .task-status-icon {
         position: absolute;
-        left: 1px;
+        left: 51px;  // 调整状态图标位置
         top: 50%;
         transform: translateY(-50%);
         width: 20px;
@@ -333,6 +337,15 @@ export class TaskViewWrapper extends ItemView {
 
       .task-done {
         color: var(--text-success);
+      }
+
+      .task-card {
+        flex-grow: 1;
+        background-color: var(--background-secondary);
+        border-radius: 5px;
+        padding: 10px;
+        margin-left: 80px;  // 调整左侧margin
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
       .task-card-header {
