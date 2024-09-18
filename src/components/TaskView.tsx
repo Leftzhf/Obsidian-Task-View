@@ -13,6 +13,24 @@ interface Task {
 }
 
 const sampleTasks: Task[] = [
+    {
+        id: '112',
+        content: 'Complete project proposala',
+        status: 'done',
+        tags: ['work', 'urgent'],
+        date: '2024-06-19',
+        startTime: '09:00',
+        endTime: '11:30'
+      },
+    {
+        id: '11',
+        content: 'Complete project proposala',
+        status: 'done',
+        tags: ['work', 'urgent'],
+        date: '2024-05-15',
+        startTime: '09:00',
+        endTime: '11:30'
+      },
   {
     id: '1',
     content: 'Complete project proposala',
