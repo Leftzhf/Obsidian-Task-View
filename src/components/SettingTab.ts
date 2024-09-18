@@ -1,5 +1,9 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
-import TaskViewPlugin from '../main';
+import TaskViewPlugin from '../../main';
+
+interface TaskViewSettings {
+  exampleSetting: string;
+}
 
 export class SettingTab extends PluginSettingTab {
   plugin: TaskViewPlugin;

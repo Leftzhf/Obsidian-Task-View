@@ -1,0 +1,97 @@
+.task-view-container {
+  padding: 20px;
+  font-family: var(--font-interface);
+}
+
+.timeline-container {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline-year,
+.timeline-month,
+.timeline-week {
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.timeline-line {
+  position: absolute;
+  left: -20px;
+  top: 0;
+  bottom: -20px;
+  width: 2px;
+  background-color: var(--background-modifier-border);
+}
+
+.task-status-icon {
+  position: absolute;
+  left: -29px;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  background-color: var(--background-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.task-icon {
+  font-size: 14px;
+}
+
+.task-todo {
+  color: var(--text-muted);
+}
+
+.task-in-progress {
+  color: var(--text-accent);
+}
+
+.task-done {
+  color: var(--text-success);
+}
+
+.task-card {
+  flex-grow: 1;
+  background-color: var(--background-secondary);
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: var(--text-muted);
+}
+
+.task-content {
+  margin-bottom: 5px;
+}
+
+.task-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.task-tag {
+  font-size: 0.8em;
+  background-color: var(--background-modifier-accent);
+  color: var(--text-muted);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
