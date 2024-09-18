@@ -15,7 +15,7 @@ interface Task {
 const sampleTasks: Task[] = [
   {
     id: '1',
-    content: 'Complete project proposal',
+    content: 'Complete project proposala',
     status: 'done',
     tags: ['work', 'urgent'],
     date: '2023-05-15',
@@ -181,11 +181,11 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
 
           return (
             <React.Fragment key={task.id}>
-              {showYear && (
-                <div className="timeline-year" data-year={year}>{year}</div>
-              )}
-              {showMonth && (
-                <div className="timeline-month" data-month={`${year}-${month}`}>{month}</div>
+              {(showYear || showMonth) && (
+                <div className="timeline-year-month">
+                  {showYear && <span className="timeline-year" data-year={year}>{year}</span>}
+                  {showMonth && <span className="timeline-month" data-month={`${year}-${month}`}>{month}</span>}
+                </div>
               )}
               {showWeek && (
                 <div className="timeline-week" data-week={`${year}-W${week}`}>Week {week}</div>
@@ -257,23 +257,41 @@ export class TaskViewWrapper extends ItemView {
     styleElement.id = 'task-view-styles';
     styleElement.textContent = `
       .task-view-container {
-        padding: 20px;
+        padding: 10px;
         font-family: var(--font-interface);
       }
 
       .timeline-container {
         position: relative;
-        padding-left: 70px;  // 增加左侧padding
+        padding-left: 40px;  // 减少左侧padding
       }
 
-      .timeline-year,
-      .timeline-month,
+      .timeline-year-month {
+        display: flex;
+        align-items: baseline;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        padding-left: 15px;  // 减少左侧padding
+      }
+
+      .timeline-year {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-right: 10px;
+      }
+
+      .timeline-month {
+        font-weight: bold;
+        font-size: 1em;
+        color: var(--text-muted);
+      }
+
       .timeline-week,
       .timeline-date {
         font-weight: bold;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-bottom: 10px;
-        padding-left: 30px;
+        padding-left: 15px;  // 减少左侧padding
       }
 
       .timeline-date {
@@ -290,7 +308,7 @@ export class TaskViewWrapper extends ItemView {
 
       .timeline-line {
         position: absolute;
-        left: 60px;  // 调整时间线位置
+        left: 30px;  // 调整时间线位置
         top: 0;
         bottom: -20px;
         width: 2px;
@@ -299,19 +317,19 @@ export class TaskViewWrapper extends ItemView {
 
       .task-start-time {
         position: absolute;
-        left: 0;
+        left: -30px;  // 调整开始时间位置
         top: 50%;
         transform: translateY(-50%);
-        width: 45px;  // 增加宽度
+        width: 40px;
         text-align: right;
         font-size: 0.8em;
         color: var(--text-muted);
-        padding-right: 5px;  // 添加右侧padding
+        padding-right: 5px;
       }
 
       .task-status-icon {
         position: absolute;
-        left: 51px;  // 调整状态图标位置
+        left: 21px;  // 调整状态图标位置
         top: 50%;
         transform: translateY(-50%);
         width: 20px;
@@ -344,7 +362,7 @@ export class TaskViewWrapper extends ItemView {
         background-color: var(--background-secondary);
         border-radius: 5px;
         padding: 10px;
-        margin-left: 80px;  // 调整左侧margin
+        margin-left: 50px;  // 减少左侧margin
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
