@@ -35,10 +35,14 @@ export default class TaskViewPlugin extends Plugin {
 		} else {
 			// Our view doesn't exist, create a new leaf in the right sidebar
 			leaf = workspace.getRightLeaf(false);
-			await leaf.setViewState({ type: 'task-view', active: true });
+			if (leaf) {
+				await leaf.setViewState({ type: 'task-view', active: true });
+			}
 		}
 
 		// Reveal the leaf in the right sidebar
-		workspace.revealLeaf(leaf);
+		if (leaf) {
+			workspace.revealLeaf(leaf);
+		}
 	}
 }

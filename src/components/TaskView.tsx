@@ -174,28 +174,29 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
           const month = taskDate.toLocaleString('default', { month: 'long' });
           const week = getWeekNumber(taskDate);
 
+          const showYear = index === 0 || year !== new Date(tasks[index - 1].date).getFullYear().toString();
+          const showMonth = index === 0 || `${year}-${month}` !== `${new Date(tasks[index - 1].date).getFullYear()}-${new Date(tasks[index - 1].date).toLocaleString('default', { month: 'long' })}`;
+          const showWeek = index === 0 || `${year}-W${week}` !== `${new Date(tasks[index - 1].date).getFullYear()}-W${getWeekNumber(new Date(tasks[index - 1].date))}`;
+          const showDate = index === 0 || task.date !== tasks[index - 1].date;
+
           return (
             <React.Fragment key={task.id}>
-              {index === 0 || year !== new Date(tasks[index - 1].date).getFullYear().toString() ? (
+              {showYear && (
                 <div className="timeline-year" data-year={year}>{year}</div>
-              ) : null}
-              {index === 0 || `${year}-${month}` !== `${new Date(tasks[index - 1].date).getFullYear()}-${new Date(tasks[index - 1].date).toLocaleString('default', { month: 'long' })}` ? (
+              )}
+              {showMonth && (
                 <div className="timeline-month" data-month={`${year}-${month}`}>{month}</div>
-              ) : null}
-              {index === 0 || `${year}-W${week}` !== `${new Date(tasks[index - 1].date).getFullYear()}-W${getWeekNumber(new Date(tasks[index - 1].date))}` ? (
+              )}
+              {showWeek && (
                 <div className="timeline-week" data-week={`${year}-W${week}`}>Week {week}</div>
-              ) : null}
+              )}
+              {showDate && (
+                <div className="timeline-date" data-date={task.date}>{task.date}</div>
+              )}
               <div className="timeline-item">
                 <div className="timeline-line"></div>
-                <div className="date-status-container">
-                  <div className="task-date">{task.date}</div>
-                  <div className="task-status-icon">
-                    {renderTaskStatusIcon(task.status)}
-                  </div>
-                </div>
                 <div className="task-card">
                   <div className="task-card-header">
-                    <span className="task-date">{task.date}</span>
                     <span className="task-time">{`${task.startTime} - ${task.endTime}`}</span>
                   </div>
                   <div className="task-content">{task.content}</div>
@@ -204,6 +205,9 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
                       <span key={tagIndex} className="task-tag">#{tag}</span>
                     ))}
                   </div>
+                </div>
+                <div className="task-status-icon">
+                  {renderTaskStatusIcon(task.status)}
                 </div>
               </div>
             </React.Fragment>
@@ -263,10 +267,17 @@ export class TaskViewWrapper extends ItemView {
 
       .timeline-year,
       .timeline-month,
-      .timeline-week {
+      .timeline-week,
+      .timeline-date {
         font-weight: bold;
         margin-top: 20px;
         margin-bottom: 10px;
+        padding-left: 30px;
+      }
+
+      .timeline-date {
+        font-size: 0.9em;
+        color: var(--text-muted);
       }
 
       .timeline-item {
@@ -278,17 +289,27 @@ export class TaskViewWrapper extends ItemView {
 
       .timeline-line {
         position: absolute;
-        left: -20px;
+        left: 10px;
         top: 0;
         bottom: -20px;
         width: 2px;
         background-color: var(--background-modifier-border);
       }
 
+      .task-card {
+        flex-grow: 1;
+        background-color: var(--background-secondary);
+        border-radius: 5px;
+        padding: 10px;
+        margin-left: 30px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
       .task-status-icon {
         position: absolute;
-        left: -29px;
-        top: 0;
+        left: 1px;
+        top: 50%;
+        transform: translateY(-50%);
         width: 20px;
         height: 20px;
         background-color: var(--background-primary);
@@ -314,18 +335,9 @@ export class TaskViewWrapper extends ItemView {
         color: var(--text-success);
       }
 
-      .task-card {
-        flex-grow: 1;
-        background-color: var(--background-secondary);
-        border-radius: 5px;
-        padding: 10px;
-        margin-left: 20px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-
       .task-card-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         margin-bottom: 5px;
         font-size: 0.9em;
         color: var(--text-muted);
