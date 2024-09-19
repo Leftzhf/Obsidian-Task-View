@@ -72,7 +72,7 @@ const sampleTasks: Task[] = [
     content: 'Prepare presentation for client',
     status: 'in-progress',
     tags: ['work', 'important'],
-    date: '2023-05-19',
+    date: '2023-04-19',
     startTime: '14:00',
     endTime: '16:30'
   },
@@ -99,7 +99,7 @@ const sampleTasks: Task[] = [
     content: 'Call mom',
     status: 'todo',
     tags: ['personal', 'family'],
-    date: '2023-05-21',
+    date: '2023-06-21',
     startTime: '19:00',
     endTime: '19:30'
   },
@@ -126,9 +126,9 @@ const sampleTasks: Task[] = [
 const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [tasks, setTasks] = useState<Task[]>(sampleTasks);
+  const [currentDate, setCurrentDate] = useState<string>('');
 
   useEffect(() => {
-    // 按日期降序排序任务
     const sortedTasks = [...tasks].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     setTasks(sortedTasks);
   }, []);
@@ -162,6 +162,11 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
     return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
   };
 
+  const getWeekDay = (date: Date): string => {
+    const days = ['日', '一', '二', '三', '四', '五', '六'];
+    return `周${days[date.getDay()]}`;
+  };
+
   const renderTaskStatusIcon = (status: string) => {
     let iconClass = '';
     let iconContent = '';
@@ -182,6 +187,39 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
     return <span className={`task-icon ${iconClass}`}>{iconContent}</span>;
   };
 
+  const handleScroll = () => {
+    if (containerRef.current) {
+      const scrollTop = containerRef.current.scrollTop;
+      const timelineItems = containerRef.current.querySelectorAll('.timeline-item');
+      let currentDate = '';
+
+      for (let i = 0; i < timelineItems.length; i++) {
+        const item = timelineItems[i];
+        const itemTop = item.offsetTop;
+        const itemBottom = itemTop + item.clientHeight;
+
+        if (scrollTop >= itemTop && scrollTop < itemBottom) {
+          currentDate = item.getAttribute('data-date') || '';
+          break;
+        }
+      }
+
+      setCurrentDate(currentDate);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   return (
     <div ref={containerRef} className="task-view-container">
       <h4>Task Timeline</h4>
@@ -191,6 +229,7 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
           const year = taskDate.getFullYear().toString();
           const month = taskDate.toLocaleString('default', { month: 'long' });
           const week = getWeekNumber(taskDate);
+          const weekDay = getWeekDay(taskDate);
 
           const showYear = index === 0 || year !== new Date(tasks[index - 1].date).getFullYear().toString();
           const showMonth = index === 0 || `${year}-${month}` !== `${new Date(tasks[index - 1].date).getFullYear()}-${new Date(tasks[index - 1].date).toLocaleString('default', { month: 'long' })}`;
@@ -199,17 +238,19 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
 
           return (
             <React.Fragment key={task.id}>
-              {(showYear || showMonth) && (
-                <div className="timeline-year-month">
-                  {showYear && <span className="timeline-year" data-year={year}>{year}</span>}
-                  {showMonth && <span className="timeline-month" data-month={`${year}-${month}`}>{month}</span>}
-                </div>
+              {showYear && (
+                <div className="timeline-year" data-year={year}>{year}</div>
+              )}
+              {showMonth && (
+                <div className="timeline-month" data-month={`${year}-${month}`}>{month}</div>
               )}
               {showWeek && (
                 <div className="timeline-week" data-week={`${year}-W${week}`}>Week {week}</div>
               )}
               {showDate && (
-                <div className="timeline-date" data-date={task.date}>{task.date}</div>
+                <div className="timeline-date" data-date={task.date}>
+                  <span className="timeline-date-text">{`${task.date} ${weekDay}`}</span>
+                </div>
               )}
               <div className="timeline-item">
                 <div className="timeline-line"></div>
@@ -408,6 +449,46 @@ export class TaskViewWrapper extends ItemView {
         color: var(--text-muted);
         padding: 2px 5px;
         border-radius: 3px;
+      }
+
+      .timeline-date {
+        position: relative;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        padding-left: 40px;
+      }
+
+      .timeline-date-text {
+        position: absolute;
+        left: -22px;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 2px 5px;
+        font-size: 0.9em;
+        color: var(--text-muted);
+        z-index: 2;
+      }
+
+      .timeline-line {
+        position: absolute;
+        left: 30px;
+        top: -10px;
+        bottom: -10px;
+        width: 2px;
+        background-color: var(--background-modifier-border);
+      }
+
+      // 添加一个伪元素来创建日期背景，确保与时间线不重叠
+      .timeline-date::before {
+        content: '';
+        position: absolute;
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 2px;
+        width: calc(100% - 30px);
+        background-color: var(--background-primary);
+        z-index: 1;
       }
     `;
     document.head.appendChild(styleElement);
