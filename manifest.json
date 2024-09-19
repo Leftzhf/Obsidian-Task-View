@@ -1,9 +1,10 @@
 {
-	"id": "obsidian-task-view",
-	"name": "Task View",
+	"id": "task-view-plugin",
+	"name": "Task View Plugin",
 	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "A timeline task view plugin for Obsidian",
+	"minAppVersion": "0.12.0",
+	"description": "A plugin to view tasks in a timeline format.",
 	"author": "Your Name",
+	"authorUrl": "https://yourwebsite.com",
 	"isDesktopOnly": false
 }

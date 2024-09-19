@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
-import { ItemView, WorkspaceLeaf } from 'obsidian';
+import ReactDOM from 'react-dom';
+import { WorkspaceLeaf, ItemView } from 'obsidian';
 import '../styles/TaskView.css'; // 引入 CSS 文件
 
 interface Task {
@@ -14,24 +14,24 @@ interface Task {
 }
 
 const sampleTasks: Task[] = [
-    {
-        id: '112',
-        content: 'Complete project proposala',
-        status: 'done',
-        tags: ['work', 'urgent'],
-        date: '2024-06-19',
-        startTime: '09:00',
-        endTime: '11:30'
-      },
-    {
-        id: '111',
-        content: 'Complete project proposala',
-        status: 'done',
-        tags: ['work', 'urgent'],
-        date: '2024-05-15',
-        startTime: '09:00',
-        endTime: '11:30'
-      },
+  {
+    id: '112',
+    content: 'Complete project proposala',
+    status: 'done',
+    tags: ['work', 'urgent'],
+    date: '2024-06-19',
+    startTime: '09:00',
+    endTime: '11:30'
+  },
+  {
+    id: '111',
+    content: 'Complete project proposala',
+    status: 'done',
+    tags: ['work', 'urgent'],
+    date: '2024-05-15',
+    startTime: '09:00',
+    endTime: '11:30'
+  },
   {
     id: '1',
     content: 'Complete project proposala',
@@ -124,7 +124,7 @@ const sampleTasks: Task[] = [
   }
 ];
 
-const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
+const TaskView: React.FC<{ leaf: WorkspaceLeaf | null }> = ({ leaf }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [tasks, setTasks] = useState<Task[]>(sampleTasks);
   const [currentDate, setCurrentDate] = useState<string>('');
@@ -141,7 +141,6 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
         const timelineItems = containerRef.current.querySelectorAll('.timeline-item');
         let currentDate = '';
 
-        // 使用 Array.from() 和 find() 方法替代 for...of 循环
         const foundItem = Array.from(timelineItems).find(item => {
           const rect = item.getBoundingClientRect();
           return rect.top >= 0 && rect.top <= window.innerHeight / 2;
@@ -171,8 +170,8 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     const dayNum = d.getUTCDay() || 7;
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
   };
 
   const getWeekDay = (date: Date): string => {
@@ -206,7 +205,7 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
     const showWeek = index === 0 || getWeekNumber(new Date(tasks[index - 1].date)) !== week;
 
     if (showWeek) {
-      return <span className="timeline-week">{`${year}-W${week.toString().padStart(2, '0')}`}</span>;
+      return <span className="timeline-week">{`W${week.toString().padStart(2, '0')}`}</span>;
     }
     return null;
   };
@@ -236,8 +235,8 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
               {showDate && (
                 <div className="timeline-date" data-date={task.date}>
                   <div className="timeline-week-and-date">
-                    {renderWeekNumber(taskDate, index)}
                     <span className="timeline-date-text">{`${task.date} ${weekDay}`}</span>
+                    {renderWeekNumber(taskDate, index)}
                   </div>
                 </div>
               )}
@@ -297,3 +296,5 @@ export class TaskViewWrapper extends ItemView {
     }
   }
 }
+
+export default TaskView;
