@@ -234,8 +234,10 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
               )}
               {showDate && (
                 <div className="timeline-date" data-date={task.date}>
-                  {renderWeekNumber(taskDate, index)}
-                  <span className="timeline-date-text">{`${task.date} ${weekDay}`}</span>
+                  <div className="timeline-week-and-date">
+                    {renderWeekNumber(taskDate, index)}
+                    <span className="timeline-date-text">{`${task.date} ${weekDay}`}</span>
+                  </div>
                 </div>
               )}
               <div className="timeline-item" data-date={task.date}>
@@ -334,8 +336,12 @@ export class TaskViewWrapper extends ItemView {
         margin-top: 20px;
         margin-bottom: 10px;
         padding-left: 20px;
+      }
+
+      .timeline-week-and-date {
         display: flex;
         align-items: center;
+        white-space: nowrap;
       }
 
       .timeline-week {
@@ -346,12 +352,15 @@ export class TaskViewWrapper extends ItemView {
         border-radius: 3px;
         padding: 2px 4px;
         margin-right: 8px;
+        white-space: nowrap;
+        flex-shrink: 0;
       }
 
       .timeline-date-text {
-        font-size: 1.2em;
+        font-size: 1em;
         font-weight: bold;
         color: var(--text-normal);
+        white-space: nowrap;
       }
 
       .timeline-line {
