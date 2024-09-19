@@ -1,19 +1,72 @@
 .task-view-container {
-  padding: 20px;
+  padding: 10px;
   font-family: var(--font-interface);
+  height: 100%;
+  overflow-y: auto;
 }
 
 .timeline-container {
   position: relative;
-  padding-left: 30px;
+  padding-left: 100px;
 }
 
-.timeline-year,
-.timeline-month,
-.timeline-week {
+.timeline-year {
+  font-size: 2em;
   font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  color: var(--text-normal);
+}
+
+.timeline-month {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: var(--text-muted);
+}
+
+.timeline-date {
+  position: relative;
   margin-top: 20px;
   margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.timeline-week-and-date {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.timeline-week {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  background-color: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 17px;
+  padding: 16px -5px;
+  margin-right: -157px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.timeline-date-text {
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--text-normal);
+  white-space: nowrap;
+  position: relative;
+  left: -49px;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--background-modifier-border);
 }
 
 .timeline-item {
@@ -21,21 +74,25 @@
   margin-bottom: 20px;
   display: flex;
   align-items: flex-start;
+  padding-left: 20px;
 }
 
-.timeline-line {
+.task-start-time {
   position: absolute;
-  left: -20px;
-  top: 0;
-  bottom: -20px;
-  width: 2px;
-  background-color: var(--background-modifier-border);
+  left: -70px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  text-align: right;
+  font-size: 0.8em;
+  color: var(--text-muted);
 }
 
 .task-status-icon {
   position: absolute;
-  left: -29px;
-  top: 0;
+  left: 1px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 20px;
   height: 20px;
   background-color: var(--background-primary);
@@ -45,34 +102,18 @@
   z-index: 1;
 }
 
-.task-icon {
-  font-size: 14px;
-}
-
-.task-todo {
-  color: var(--text-muted);
-}
-
-.task-in-progress {
-  color: var(--text-accent);
-}
-
-.task-done {
-  color: var(--text-success);
-}
-
 .task-card {
   flex-grow: 1;
   background-color: var(--background-secondary);
   border-radius: 5px;
   padding: 10px;
-  margin-left: 20px;
+  margin-left: 30px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .task-card-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 5px;
   font-size: 0.9em;
   color: var(--text-muted);

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ItemView, WorkspaceLeaf } from 'obsidian';
+import '../styles/TaskView.css'; // 引入 CSS 文件
 
 interface Task {
   id: string;
@@ -288,160 +289,11 @@ export class TaskViewWrapper extends ItemView {
     this.containerEl.children[1].appendChild(this.root);
     this.reactRoot = ReactDOM.createRoot(this.root);
     this.reactRoot.render(<TaskView leaf={this.leaf} />);
-
-    // 加载 CSS
-    this.loadStyles();
   }
 
   async onClose() {
     if (this.reactRoot) {
       this.reactRoot.unmount();
     }
-  }
-
-  loadStyles() {
-    const styleElement = document.createElement('style');
-    styleElement.id = 'task-view-styles';
-    styleElement.textContent = `
-      .task-view-container {
-        padding: 10px;
-        font-family: var(--font-interface);
-        height: 100%;
-        overflow-y: auto;
-      }
-
-      .timeline-container {
-        position: relative;
-        padding-left: 100px;
-      }
-
-      .timeline-year {
-        font-size: 2em;
-        font-weight: bold;
-        margin-top: 40px;
-        margin-bottom: 20px;
-        color: var(--text-normal);
-      }
-
-      .timeline-month {
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-top: 30px;
-        margin-bottom: 15px;
-        color: var(--text-muted);
-      }
-
-      .timeline-date {
-        position: relative;
-        margin-top: 20px;
-        margin-bottom: 10px;
-        padding-left: 20px;
-      }
-
-      .timeline-week-and-date {
-        display: flex;
-        align-items: center;
-        white-space: nowrap;
-      }
-
-.timeline-week {
-    font-size: 0.8em;
-    color: var(--text-muted);
-    background-color: var(--background-secondary);
-    border: 1px solid var(--background-modifier-border);
-    border-radius: 17px;
-    padding: 16px -5px;
-    margin-right: -157px;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.timeline-date-text {
-    font-size: 1em;
-    font-weight: bold;
-    color: var(--text-normal);
-    white-space: nowrap;
-    position: relative;
-    left: -49px;
-}
-
-      .timeline-line {
-        position: absolute;
-        left: 10px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background-color: var(--background-modifier-border);
-      }
-
-      .timeline-item {
-        position: relative;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: flex-start;
-        padding-left: 20px;
-      }
-
-      .task-start-time {
-        position: absolute;
-        left: -70px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 40px;
-        text-align: right;
-        font-size: 0.8em;
-        color: var(--text-muted);
-      }
-
-      .task-status-icon {
-        position: absolute;
-        left: 1px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        background-color: var(--background-primary);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1;
-      }
-
-      .task-card {
-        flex-grow: 1;
-        background-color: var(--background-secondary);
-        border-radius: 5px;
-        padding: 10px;
-        margin-left: 30px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-
-      .task-card-header {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 5px;
-        font-size: 0.9em;
-        color: var(--text-muted);
-      }
-
-      .task-content {
-        margin-bottom: 5px;
-      }
-
-      .task-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-      }
-
-      .task-tag {
-        font-size: 0.8em;
-        background-color: var(--background-modifier-accent);
-        color: var(--text-muted);
-        padding: 2px 5px;
-        border-radius: 3px;
-      }
-    `;
-    document.head.appendChild(styleElement);
   }
 }
