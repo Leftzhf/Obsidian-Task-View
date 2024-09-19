@@ -23,7 +23,7 @@ const sampleTasks: Task[] = [
         endTime: '11:30'
       },
     {
-        id: '11',
+        id: '111',
         content: 'Complete project proposala',
         status: 'done',
         tags: ['work', 'urgent'],
@@ -134,23 +134,35 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
   }, []);
 
   useEffect(() => {
-    const resizeObserver = new ResizeObserver(() => {
+    const handleScroll = () => {
       if (containerRef.current) {
-        const width = containerRef.current.clientWidth;
-        if (width < 600) {
-          containerRef.current.classList.add('narrow');
-        } else {
-          containerRef.current.classList.remove('narrow');
-        }
-      }
-    });
+        const scrollTop = containerRef.current.scrollTop;
+        const timelineItems = containerRef.current.querySelectorAll('.timeline-item');
+        let currentDate = '';
 
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
+        // 使用 Array.from() 和 find() 方法替代 for...of 循环
+        const foundItem = Array.from(timelineItems).find(item => {
+          const rect = item.getBoundingClientRect();
+          return rect.top >= 0 && rect.top <= window.innerHeight / 2;
+        });
+
+        if (foundItem) {
+          currentDate = foundItem.getAttribute('data-date') || '';
+        }
+
+        setCurrentDate(currentDate);
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
     }
 
     return () => {
-      resizeObserver.disconnect();
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
     };
   }, []);
 
@@ -187,38 +199,16 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
     return <span className={`task-icon ${iconClass}`}>{iconContent}</span>;
   };
 
-  const handleScroll = () => {
-    if (containerRef.current) {
-      const scrollTop = containerRef.current.scrollTop;
-      const timelineItems = containerRef.current.querySelectorAll('.timeline-item');
-      let currentDate = '';
+  const renderWeekNumber = (taskDate: Date, index: number): JSX.Element | null => {
+    const week = getWeekNumber(taskDate);
+    const year = taskDate.getFullYear().toString();
+    const showWeek = index === 0 || getWeekNumber(new Date(tasks[index - 1].date)) !== week;
 
-      for (let i = 0; i < timelineItems.length; i++) {
-        const item = timelineItems[i];
-        const itemTop = item.offsetTop;
-        const itemBottom = itemTop + item.clientHeight;
-
-        if (scrollTop >= itemTop && scrollTop < itemBottom) {
-          currentDate = item.getAttribute('data-date') || '';
-          break;
-        }
-      }
-
-      setCurrentDate(currentDate);
+    if (showWeek) {
+      return <span className="timeline-week">{`${year}-W${week.toString().padStart(2, '0')}`}</span>;
     }
+    return null;
   };
-
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
 
   return (
     <div ref={containerRef} className="task-view-container">
@@ -228,31 +218,27 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf }> = ({ leaf }) => {
           const taskDate = new Date(task.date);
           const year = taskDate.getFullYear().toString();
           const month = taskDate.toLocaleString('default', { month: 'long' });
-          const week = getWeekNumber(taskDate);
           const weekDay = getWeekDay(taskDate);
 
           const showYear = index === 0 || year !== new Date(tasks[index - 1].date).getFullYear().toString();
           const showMonth = index === 0 || `${year}-${month}` !== `${new Date(tasks[index - 1].date).getFullYear()}-${new Date(tasks[index - 1].date).toLocaleString('default', { month: 'long' })}`;
-          const showWeek = index === 0 || `${year}-W${week}` !== `${new Date(tasks[index - 1].date).getFullYear()}-W${getWeekNumber(new Date(tasks[index - 1].date))}`;
           const showDate = index === 0 || task.date !== tasks[index - 1].date;
 
           return (
             <React.Fragment key={task.id}>
               {showYear && (
-                <div className="timeline-year" data-year={year}>{year}</div>
+                <div className="timeline-year">{year}</div>
               )}
               {showMonth && (
-                <div className="timeline-month" data-month={`${year}-${month}`}>{month}</div>
-              )}
-              {showWeek && (
-                <div className="timeline-week" data-week={`${year}-W${week}`}>Week {week}</div>
+                <div className="timeline-month">{month}</div>
               )}
               {showDate && (
                 <div className="timeline-date" data-date={task.date}>
+                  {renderWeekNumber(taskDate, index)}
                   <span className="timeline-date-text">{`${task.date} ${weekDay}`}</span>
                 </div>
               )}
-              <div className="timeline-item">
+              <div className="timeline-item" data-date={task.date}>
                 <div className="timeline-line"></div>
                 <div className="task-start-time">{task.startTime}</div>
                 <div className="task-status-icon">
@@ -318,44 +304,63 @@ export class TaskViewWrapper extends ItemView {
       .task-view-container {
         padding: 10px;
         font-family: var(--font-interface);
+        height: 100%;
+        overflow-y: auto;
       }
 
       .timeline-container {
         position: relative;
-        padding-left: 40px;  // 减少左侧padding
-      }
-
-      .timeline-year-month {
-        display: flex;
-        align-items: baseline;
-        margin-top: 20px;
-        margin-bottom: 10px;
-        padding-left: 15px;  // 减少左侧padding
+        padding-left: 100px;
       }
 
       .timeline-year {
+        font-size: 2em;
         font-weight: bold;
-        font-size: 1.2em;
-        margin-right: 10px;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        color: var(--text-normal);
       }
 
       .timeline-month {
+        font-size: 1.5em;
         font-weight: bold;
-        font-size: 1em;
+        margin-top: 30px;
+        margin-bottom: 15px;
         color: var(--text-muted);
       }
 
-      .timeline-week,
       .timeline-date {
-        font-weight: bold;
-        margin-top: 10px;
+        position: relative;
+        margin-top: 20px;
         margin-bottom: 10px;
-        padding-left: 15px;  // 减少左侧padding
+        padding-left: 20px;
+        display: flex;
+        align-items: center;
       }
 
-      .timeline-date {
-        font-size: 0.9em;
+      .timeline-week {
+        font-size: 0.8em;
         color: var(--text-muted);
+        background-color: var(--background-secondary);
+        border: 1px solid var(--background-modifier-border);
+        border-radius: 3px;
+        padding: 2px 4px;
+        margin-right: 8px;
+      }
+
+      .timeline-date-text {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: var(--text-normal);
+      }
+
+      .timeline-line {
+        position: absolute;
+        left: 10px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: var(--background-modifier-border);
       }
 
       .timeline-item {
@@ -363,32 +368,23 @@ export class TaskViewWrapper extends ItemView {
         margin-bottom: 20px;
         display: flex;
         align-items: flex-start;
-      }
-
-      .timeline-line {
-        position: absolute;
-        left: 30px;  // 调整时间线位置
-        top: 0;
-        bottom: -20px;
-        width: 2px;
-        background-color: var(--background-modifier-border);
+        padding-left: 20px;
       }
 
       .task-start-time {
         position: absolute;
-        left: -30px;  // 调整开始时间位置
+        left: -70px;
         top: 50%;
         transform: translateY(-50%);
         width: 40px;
         text-align: right;
         font-size: 0.8em;
         color: var(--text-muted);
-        padding-right: 5px;
       }
 
       .task-status-icon {
         position: absolute;
-        left: 21px;  // 调整状态图标位置
+        left: 1px;
         top: 50%;
         transform: translateY(-50%);
         width: 20px;
@@ -400,28 +396,12 @@ export class TaskViewWrapper extends ItemView {
         z-index: 1;
       }
 
-      .task-icon {
-        font-size: 14px;
-      }
-
-      .task-todo {
-        color: var(--text-muted);
-      }
-
-      .task-in-progress {
-        color: var(--text-accent);
-      }
-
-      .task-done {
-        color: var(--text-success);
-      }
-
       .task-card {
         flex-grow: 1;
         background-color: var(--background-secondary);
         border-radius: 5px;
         padding: 10px;
-        margin-left: 50px;  // 减少左侧margin
+        margin-left: 30px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
 
@@ -449,46 +429,6 @@ export class TaskViewWrapper extends ItemView {
         color: var(--text-muted);
         padding: 2px 5px;
         border-radius: 3px;
-      }
-
-      .timeline-date {
-        position: relative;
-        margin-top: 20px;
-        margin-bottom: 10px;
-        padding-left: 40px;
-      }
-
-      .timeline-date-text {
-        position: absolute;
-        left: -22px;
-        top: 50%;
-        transform: translateY(-50%);
-        padding: 2px 5px;
-        font-size: 0.9em;
-        color: var(--text-muted);
-        z-index: 2;
-      }
-
-      .timeline-line {
-        position: absolute;
-        left: 30px;
-        top: -10px;
-        bottom: -10px;
-        width: 2px;
-        background-color: var(--background-modifier-border);
-      }
-
-      // 添加一个伪元素来创建日期背景，确保与时间线不重叠
-      .timeline-date::before {
-        content: '';
-        position: absolute;
-        left: 30px;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 2px;
-        width: calc(100% - 30px);
-        background-color: var(--background-primary);
-        z-index: 1;
       }
     `;
     document.head.appendChild(styleElement);
