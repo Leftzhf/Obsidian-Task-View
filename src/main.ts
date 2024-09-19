@@ -1,40 +1,51 @@
 import { Plugin } from 'obsidian';
 import { TaskViewWrapper } from './components/TaskView';
+import { SettingTab } from './components/SettingTab';
+
+interface TaskViewSettings {
+  // 添加您的设置项
+  exampleSetting: string;
+}
+
+const DEFAULT_SETTINGS: TaskViewSettings = {
+  exampleSetting: 'default value'
+};
 
 export default class TaskViewPlugin extends Plugin {
+  settings: TaskViewSettings;
+
   async onload() {
-    console.log('Loading Task View Plugin');
+    await this.loadSettings();
 
-    this.registerView(
-      'task-view',
-      (leaf) => new TaskViewWrapper(leaf)
-    );
+    this.registerView('task-view', (leaf) => new TaskViewWrapper(leaf));
 
-    this.addRibbonIcon('checkmark', 'Open Task View', () => {
+    this.addSettingTab(new SettingTab(this.app, this));
+
+    this.addRibbonIcon('calendar', 'Open Task View', () => {
       this.activateView();
     });
+  }
 
-    this.addCommand({
-      id: 'open-task-view',
-      name: 'Open Task View',
-      callback: () => this.activateView(),
-    });
+  async loadSettings() {
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+  }
+
+  async saveSettings() {
+    await this.saveData(this.settings);
   }
 
   async onunload() {
-    console.log('Unloading Task View Plugin');
+    // 添加清理代码
   }
 
   async activateView() {
-    this.app.workspace.detachLeavesOfType('task-view');
+    const { workspace } = this.app;
 
-    await this.app.workspace.getRightLeaf(false).setViewState({
-      type: 'task-view',
-      active: true,
-    });
-
-    this.app.workspace.revealLeaf(
-      this.app.workspace.getLeavesOfType('task-view')[0]
-    );
+    let leaf = workspace.getLeavesOfType('task-view')[0];
+    if (!leaf) {
+      leaf = workspace.getRightLeaf(false);
+      await leaf.setViewState({ type: 'task-view', active: true });
+    }
+    workspace.revealLeaf(leaf);
   }
 }

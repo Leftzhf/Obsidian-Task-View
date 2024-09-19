@@ -37,6 +37,8 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  margin-left: -60px; /* 添加这行来向左移动文本 */
+  margin-right: 18px; /* 增加右边距来保持整体布局 */
 }
 
 .timeline-week {
@@ -46,7 +48,6 @@
   border: 1px solid var(--background-modifier-border);
   border-radius: 3px;
   padding: 2px 4px;
-  margin-left: 8px;
   white-space: nowrap;
   flex-shrink: 0;
 }

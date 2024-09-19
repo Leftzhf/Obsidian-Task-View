@@ -1,9 +1,5 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
-import TaskViewPlugin from '../../main';
-
-interface TaskViewSettings {
-  exampleSetting: string;
-}
+import TaskViewPlugin from '../main';
 
 export class SettingTab extends PluginSettingTab {
   plugin: TaskViewPlugin;
@@ -15,11 +11,11 @@ export class SettingTab extends PluginSettingTab {
 
   display(): void {
     const { containerEl } = this;
+
     containerEl.empty();
-    containerEl.createEl('h2', { text: 'Task View Settings' });
 
     new Setting(containerEl)
-      .setName('Example Setting')
+      .setName('Example setting')
       .setDesc('This is an example setting.')
       .addText(text => text
         .setPlaceholder('Enter a value')
