@@ -344,24 +344,26 @@ export class TaskViewWrapper extends ItemView {
         white-space: nowrap;
       }
 
-      .timeline-week {
-        font-size: 0.8em;
-        color: var(--text-muted);
-        background-color: var(--background-secondary);
-        border: 1px solid var(--background-modifier-border);
-        border-radius: 3px;
-        padding: 2px 4px;
-        margin-right: 8px;
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
+.timeline-week {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    background-color: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 17px;
+    padding: 16px -5px;
+    margin-right: -157px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
 
-      .timeline-date-text {
-        font-size: 1em;
-        font-weight: bold;
-        color: var(--text-normal);
-        white-space: nowrap;
-      }
+.timeline-date-text {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--text-normal);
+    white-space: nowrap;
+    position: relative;
+    left: -49px;
+}
 
       .timeline-line {
         position: absolute;
