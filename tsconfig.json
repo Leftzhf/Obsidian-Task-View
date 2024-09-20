@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": ["dom", "es2015"],
-    "jsx": "react",
-    "outDir": "./dist",
-    "strict": true,
+    "target": "ES6",
+    "lib": ["DOM", "ES6", "DOM.Iterable", "ScriptHost", "ES2016.Array.Include"],
+    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "jsx": "react"
+    // ... 其他编译器选项
   },
   "include": ["src"]
 }

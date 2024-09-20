@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 import { WorkspaceLeaf, ItemView } from 'obsidian';
 import '../styles/TaskView.css'; // 引入 CSS 文件
 
@@ -212,7 +212,6 @@ const TaskView: React.FC<{ leaf: WorkspaceLeaf | null }> = ({ leaf }) => {
 
   return (
     <div ref={containerRef} className="task-view-container">
-      <h4>Task Timeline</h4>
       <div className="timeline-container">
         {tasks.map((task: Task, index: number) => {
           const taskDate = new Date(task.date);
