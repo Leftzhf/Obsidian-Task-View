@@ -38,6 +38,7 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  margin-left: -57px;
 }
 
 .timeline-week {
